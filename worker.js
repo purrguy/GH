@@ -41,6 +41,26 @@ async function proxyGithub(file) {
   return new Response(await response.text(), { headers: TEXT_HEADERS });
 }
 
+/* 5.2.0: private gh-secret builds (loader). Token never leaves the worker. */
+async function proxySecret(env, file) {
+  const token = env.GITHUB_TOKEN || "";
+  if (!token) {
+    return new Response("hub not published", { status: 503, headers: TEXT_HEADERS });
+  }
+  const repo = env.GH_SECRET_REPO || "purrguy/gh-secret";
+  const res = await fetch(`https://api.github.com/repos/${repo}/contents/${file}`, {
+    headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github.raw", "User-Agent": "gh-proxy" },
+  });
+  if (!res.ok) {
+    return new Response(`${file} not found`, { status: 404, headers: TEXT_HEADERS });
+  }
+  const text = await res.text();
+  if (!text || text.length < 40) {
+    return new Response(`${file} empty`, { status: 404, headers: TEXT_HEADERS });
+  }
+  return new Response(text, { headers: TEXT_HEADERS });
+}
+
 function navHtml(active) {
   const items = [
     ["/home", "Home"],
@@ -328,7 +348,7 @@ function statusHtml() {
       <tbody>
         <tr><td>greedyhudzell.xyz</td><td>Pages, pricing, guide</td></tr>
         <tr><td>/validate</td><td>Key check (loader + home form)</td></tr>
-        <tr><td>/loader.lua · /script.lua</td><td>Proxied from GitHub GH repo</td></tr>
+        <tr><td>/loader.lua</td><td>Private build v5.2.0</td></tr>
         <tr><td>Discord bot</td><td>Keys, verify, updates</td></tr>
         <tr><td>Work.ink free keys</td><td>Depends on third-party unlock flow</td></tr>
       </tbody>
@@ -612,10 +632,13 @@ export default {
       return Response.redirect(new URL("/home", url).toString(), 302);
     }
 
-    // Lua proxies
-    if (path === "/script.lua") return proxyGithub("greedy.lua");
+    // Lua proxies (5.2.0: loader from private gh-secret; script.lua is gone,
+    // the hub ships inside /validate)
+    if (path === "/script.lua") {
+      return new Response("gone: hub ships inside /validate since 5.2.0", { status: 410, headers: TEXT_HEADERS });
+    }
     if (path === "/library.lua") return proxyGithub("greedylibrary.lua");
-    if (path === "/loader.lua") return proxyGithub("greedyloader.lua");
+    if (path === "/loader.lua") return proxySecret(env, "greedyloader.lua");
     if (path === "/modules.lua") return proxyGithub("greedymodules.lua");
 
     // Pages
