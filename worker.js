@@ -348,7 +348,7 @@ function statusHtml() {
       <tbody>
         <tr><td>greedyhudzell.xyz</td><td>Pages, pricing, guide</td></tr>
         <tr><td>/validate</td><td>Key check (loader + home form)</td></tr>
-        <tr><td>/loader.lua</td><td>Private build v5.2.0</td></tr>
+        <tr><td>/loader.lua</td><td>Public obfuscated loader (GH repo)</td></tr>
         <tr><td>Discord bot</td><td>Keys, verify, updates</td></tr>
         <tr><td>Work.ink free keys</td><td>Depends on third-party unlock flow</td></tr>
       </tbody>
@@ -632,13 +632,13 @@ export default {
       return Response.redirect(new URL("/home", url).toString(), 302);
     }
 
-    // Lua proxies (5.2.0: loader from private gh-secret; script.lua is gone,
-    // the hub ships inside /validate)
+    // Lua proxies (5.2.0: loader is the PUBLIC obfuscated build from the GH repo;
+    // script.lua is gone, the hub ships inside /validate)
     if (path === "/script.lua") {
       return new Response("gone: hub ships inside /validate since 5.2.0", { status: 410, headers: TEXT_HEADERS });
     }
     if (path === "/library.lua") return proxyGithub("greedylibrary.lua");
-    if (path === "/loader.lua") return proxySecret(env, "greedyloader.lua");
+    if (path === "/loader.lua") return proxyGithub("greedyloader.lua");
     if (path === "/modules.lua") return proxyGithub("greedymodules.lua");
 
     // Pages
