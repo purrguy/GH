@@ -68,7 +68,6 @@ function navHtml(active) {
     ["/status", "Status"],
     ["/executors", "Executors"],
     ["/guide", "Guide"],
-    ["/tos", "ToS"],
     ["/obfuscator", "Obfuscator"],
   ];
   return items
@@ -585,11 +584,26 @@ function tosHtml() {
 function privacyHtml() {
   const content = `
   <div class="page-header"><div class="badge">Legal</div><h1>Privacy Policy</h1>
-  <p class="sub">Last updated: August 2026</p></div>
-  <div class="section"><h2>Data we use</h2>
-  <p>Roblox username (key bind), Discord IDs (bot), key metadata, minimal technical logs for abuse prevention.</p></div>
-  <div class="section"><h2>Contact</h2>
-  <p><a href="${DISCORD}">Discord</a></p></div>
+  <p class="sub">Effective October 2026</p></div>
+  <div class="section"><h2>Who we are</h2>
+  <p>Greedy Hudzell provides a Roblox script hub with license-key access. Contact: our <a href="${DISCORD}">Discord server</a>.</p></div>
+  <div class="section"><h2>What we collect and why</h2>
+  <p><b>License enforcement</b> — your license key, its plan, creation and execution timestamps, and the Roblox username and user ID it is used with. Without this we cannot tell valid keys from shared or stolen ones.</p>
+  <p style="margin-top:8px"><b>Device binding</b> — your executor's machine identifier (HWID) when the script runs. A key is bound to the first machine that uses it so one purchase cannot be passed around freely. Universal (all-HWID) keys skip this binding.</p>
+  <p style="margin-top:8px"><b>Discord verification (optional)</b> — if you link Discord, we store your Discord user ID and guild membership status to grant community roles and free features.</p>
+  <p style="margin-top:8px"><b>Fraud and abuse prevention</b> — failed key attempts, HWID bindings and resets, ban and kick records, and IP-derived session identifiers with a session cookie. This is how we detect key sharing, ban evasion, and attacks on the service.</p></div>
+  <div class="section"><h2>What we do not collect</h2>
+  <p>No payment details (handled by the checkout provider), no chat logs, no browsing history outside this site.</p></div>
+  <div class="section"><h2>Sharing</h2>
+  <p>We do not sell personal data. Data is processed on Cloudflare's infrastructure and shared only with staff moderation tooling (ban appeals, key support) and where required by law.</p></div>
+  <div class="section"><h2>Retention</h2>
+  <p>Key and execution records are kept while the key is active and for a reasonable period after for fraud prevention. Ban records are kept while a ban is in force. Security logs rotate periodically.</p></div>
+  <div class="section"><h2>Your rights</h2>
+  <p>Ask for a copy or deletion of your data via a Discord ticket. Deletion of license records while a key is active will deactivate the key. HWID bindings can be reset on request subject to the rewire policy in our <a href="/tos">Terms of Service</a>.</p></div>
+  <div class="section"><h2>Minors</h2>
+  <p>This service is not directed at children under 13. If you are under 13, do not use it.</p></div>
+  <div class="section"><h2>Changes</h2>
+  <p>Material changes will be announced in our Discord server. Continued use after changes take effect constitutes acceptance.</p></div>
 `;
   return pageShell("Privacy Policy", "privacy", content);
 }
